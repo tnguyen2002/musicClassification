@@ -27,27 +27,27 @@ train_data_gen = image_gen_train.flow_from_directory(
     directory=train_dir,
     shuffle=True,
     color_mode="grayscale",
-    subset = "training",
-    target_size=(IMG_HEIGHT, IMG_WIDTH), 
-    seed = 1,
+    subset="training",
+    target_size=(IMG_HEIGHT, IMG_WIDTH),
+    seed=1,
     class_mode='categorical')
 
 test_data_gen = image_gen_test.flow_from_directory(
     batch_size=batch_size,
     directory=test_dir,
     color_mode="grayscale",
-    subset = "training",
+    subset="training",
     target_size=(IMG_HEIGHT, IMG_WIDTH),
-    seed = 1,
+    seed=1,
     class_mode='categorical')
 
 val_data_gen = image_gen_val.flow_from_directory(
     batch_size=batch_size,
     directory=val_dir,
     color_mode="grayscale",
-    subset = "training",
+    subset="training",
     target_size=(IMG_HEIGHT, IMG_WIDTH),
-    seed = 1,
+    seed=1,
     class_mode='categorical')
 
 print(train_data_gen.class_indices.keys())
@@ -55,7 +55,9 @@ print(train_data_gen.class_indices.keys())
 x, y = next(train_data_gen)
 print(x.shape)
 print(y.shape)
-def GenreModel(input_shape=(IMG_HEIGHT,IMG_WIDTH, 1), classes=16):
+
+
+def GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16):
     X_input = Input(input_shape)
 
     X = Conv2D(8, kernel_size=(3, 3), strides=(1, 1))(X_input)
@@ -63,28 +65,28 @@ def GenreModel(input_shape=(IMG_HEIGHT,IMG_WIDTH, 1), classes=16):
     X = Activation('relu')(X)
     X = MaxPooling2D((2, 2))(X)
 
-    X = Conv2D(16,kernel_size=(3,3),strides = (1,1))(X_input)
+    X = Conv2D(16, kernel_size=(3, 3), strides=(1, 1))(X_input)
     X = BatchNormalization(axis=3)(X)
     X = Activation('relu')(X)
-    X = MaxPooling2D((2,2))(X)
+    X = MaxPooling2D((2, 2))(X)
 
-    X = Conv2D(32,kernel_size=(3,3),strides = (1,1))(X)
+    X = Conv2D(32, kernel_size=(3, 3), strides=(1, 1))(X)
     X = BatchNormalization(axis=3)(X)
     X = Activation('relu')(X)
-    X = MaxPooling2D((2,2))(X)
+    X = MaxPooling2D((2, 2))(X)
 
-    X = Conv2D(64,kernel_size=(3,3),strides = (1,1))(X)
+    X = Conv2D(64, kernel_size=(3, 3), strides=(1, 1))(X)
     X = BatchNormalization(axis=3)(X)
     X = Activation('relu')(X)
-    X = MaxPooling2D((2,2))(X)
-    
-    X = Conv2D(128,kernel_size=(3,3),strides = (1,1))(X)
-    X = BatchNormalization(axis=3)(X)
-    X = Activation('relu')(X)
-    X = MaxPooling2D((2,2))(X)
+    X = MaxPooling2D((2, 2))(X)
+
+    # X = Conv2D(128, kernel_size=(3, 3), strides=(1, 1))(X)
+    # X = BatchNormalization(axis=3)(X)
+    # X = Activation('relu')(X)
+    # X = MaxPooling2D((2, 2))(X)
 
     X = Flatten()(X)
-    X = Dropout(rate=0.5)(X)
+    # X = Dropout(rate=0.5)(X)
     X = Dense(classes, activation='softmax', name='fc' + str(classes))(X)
 
     model = Model(inputs=X_input, outputs=X, name='GenreModel')
@@ -103,13 +105,15 @@ def GenreModel(input_shape=(IMG_HEIGHT,IMG_WIDTH, 1), classes=16):
 # model.add(Flatten())
 # model.add(Dense(16, activation='softmax'))
 
-model = GenreModel(input_shape=(IMG_HEIGHT,IMG_WIDTH, 1), classes=16)
+
+model = GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16)
 model.summary()
 opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
-model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=opt, loss='categorical_crossentropy',
+              metrics=['accuracy'])
 
 model.fit(train_data_gen, epochs=20, validation_data=val_data_gen)
-model.save('melCNN6Layer')
+model.save('melCNN5LNoDropout')
 
-model = tf.keras.models.load_model('melCNN6Layer')
+model = tf.keras.models.load_model('melCNN5LNoDropout')
 model.evaluate(test_data_gen)
