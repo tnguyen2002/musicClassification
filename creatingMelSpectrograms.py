@@ -1,13 +1,10 @@
 import os
 import numpy as np
-import sklearn as skl
-import sklearn.decomposition
-import sklearn.svm
 import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 from glob import glob
-import skimage.io
+# import skimage.io
 import warnings
 
 warnings.filterwarnings("ignore")
