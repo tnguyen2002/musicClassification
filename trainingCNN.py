@@ -113,7 +113,7 @@ model.compile(optimizer=opt, loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 model.fit(train_data_gen, epochs=20, validation_data=val_data_gen)
-model.save('melCNN5LNoDropout')
+model.save('melCNN4LDropout')
 
-model = tf.keras.models.load_model('melCNN5LNoDropout')
+model = tf.keras.models.load_model('melCNN4LDropout')
 model.evaluate(test_data_gen)
