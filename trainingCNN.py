@@ -86,7 +86,7 @@ def GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16):
     # X = MaxPooling2D((2, 2))(X)
 
     X = Flatten()(X)
-    # X = Dropout(rate=0.5)(X)
+    X = Dropout(rate=0.5)(X)
     X = Dense(classes, activation='softmax', name='fc' + str(classes))(X)
 
     model = Model(inputs=X_input, outputs=X, name='GenreModel')
