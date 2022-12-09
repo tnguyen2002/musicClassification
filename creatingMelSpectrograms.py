@@ -26,7 +26,7 @@ files = sorted(list(glob(base_path + "/*/*.mp3")))
 # print(len(files))
 # base_out = "images/"
 base_out = "melSpectrogramsColored/"
-for i in range(5):
+for i in range(len(files)):
     #     print(i)
     file = files[i]
     print(str(i) + " = " + file)
