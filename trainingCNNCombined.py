@@ -17,7 +17,7 @@ batch_size = 32
 train_dir = 'combinedImagesSplit/train'
 test_dir = 'combinedImagesSplit/test'
 val_dir = 'combinedImagesSplit/val'
-
+MODEL_NAME = "combinedCNN2LDropout10E"
 # tf.random.set_seed(1)
 image_gen_train = ImageDataGenerator(rescale=1./255)
 image_gen_val = ImageDataGenerator(rescale=1./255)
@@ -30,7 +30,6 @@ train_data_gen = image_gen_train.flow_from_directory(
     color_mode="grayscale",
     subset="training",
     target_size=(IMG_HEIGHT, IMG_WIDTH),
-    seed=1,
     class_mode='categorical')
 
 test_data_gen = image_gen_test.flow_from_directory(
@@ -39,7 +38,6 @@ test_data_gen = image_gen_test.flow_from_directory(
     color_mode="grayscale",
     subset="training",
     target_size=(IMG_HEIGHT, IMG_WIDTH),
-    seed=1,
     class_mode='categorical')
 
 val_data_gen = image_gen_val.flow_from_directory(
@@ -48,7 +46,6 @@ val_data_gen = image_gen_val.flow_from_directory(
     color_mode="grayscale",
     subset="training",
     target_size=(IMG_HEIGHT, IMG_WIDTH),
-    seed=1,
     class_mode='categorical')
 
 print(train_data_gen.class_indices.keys())
@@ -71,10 +68,10 @@ def GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16):
     X = Activation('relu')(X)
     X = MaxPooling2D((2, 2))(X)
 
-    X = Conv2D(32, kernel_size=(3, 3), strides=(1, 1))(X)
-    X = BatchNormalization(axis=3)(X)
-    X = Activation('relu')(X)
-    X = MaxPooling2D((2, 2))(X)
+    # X = Conv2D(32, kernel_size=(3, 3), strides=(1, 1))(X)
+    # X = BatchNormalization(axis=3)(X)
+    # X = Activation('relu')(X)
+    # X = MaxPooling2D((2, 2))(X)
 
     # X = Conv2D(64, kernel_size=(3, 3), strides=(1, 1))(X)
     # X = BatchNormalization(axis=3)(X)
@@ -90,7 +87,7 @@ def GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16):
     X = Dropout(rate=0.3)(X)
     X = Dense(classes, activation='softmax', name='fc' + str(classes))(X)
 
-    model = Model(inputs=X_input, outputs=X, name='GenreModel')
+    model = Model(inputs=X_input, outputs=X, name=MODEL_NAME)
     return model
 
 # model = tf.keras.Sequential(name="Sequential_CNN")
@@ -114,7 +111,7 @@ model.compile(optimizer=opt, loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 model.fit(train_data_gen, epochs=10, validation_data=test_data_gen)
-model.save('combinedCNN3LDropout10E')
+model.save(MODEL_NAME)
 
-model = tf.keras.models.load_model('combinedCNN3LDropout10E')
+model = tf.keras.models.load_model(MODEL_NAME)
 model.evaluate(test_data_gen)
