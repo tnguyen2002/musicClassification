@@ -76,10 +76,10 @@ def GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16):
     X = Activation('relu')(X)
     X = MaxPooling2D((2, 2))(X)
 
-    X = Conv2D(64, kernel_size=(3, 3), strides=(1, 1))(X)
-    X = BatchNormalization(axis=3)(X)
-    X = Activation('relu')(X)
-    X = MaxPooling2D((2, 2))(X)
+    # X = Conv2D(64, kernel_size=(3, 3), strides=(1, 1))(X)
+    # X = BatchNormalization(axis=3)(X)
+    # X = Activation('relu')(X)
+    # X = MaxPooling2D((2, 2))(X)
 
     # X = Conv2D(128, kernel_size=(3, 3), strides=(1, 1))(X)
     # X = BatchNormalization(axis=3)(X)
@@ -114,7 +114,7 @@ model.compile(optimizer=opt, loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 model.fit(train_data_gen, epochs=10, validation_data=test_data_gen)
-model.save('combinedCNN4LDropout10E')
+model.save('combinedCNN3LDropout10E')
 
-model = tf.keras.models.load_model('combinedCNN4LDropout10E')
+model = tf.keras.models.load_model('combinedCNN3LDropout10E')
 model.evaluate(test_data_gen)
