@@ -14,9 +14,9 @@ from tensorflow.keras.layers import (Input, Add, Dense, Activation, ZeroPadding2
 IMG_HEIGHT = 128
 IMG_WIDTH = 385
 batch_size = 32
-train_dir = 'combinedSplit/train'
-test_dir = 'combinedSplit/test'
-val_dir = 'combinedSplit/val'
+train_dir = 'combinedImagesSplit/train'
+test_dir = 'combinedImagesSplit/test'
+val_dir = 'combinedImagesSplit/val'
 
 # tf.random.set_seed(1)
 image_gen_train = ImageDataGenerator(rescale=1./255)
