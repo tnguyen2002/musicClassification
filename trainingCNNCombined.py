@@ -1,10 +1,6 @@
-
-import os
-import IPython.display as ipd
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-import PIL
 import tensorflow.keras.preprocessing.image
 from tensorflow.keras import Model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, img_to_array, load_img, array_to_img
@@ -13,7 +9,7 @@ from tensorflow.keras.layers import (Input, Add, Dense, Activation, ZeroPadding2
 
 IMG_HEIGHT = 148
 IMG_WIDTH = 385
-batch_size = 32
+batch_size = 16
 train_dir = 'combinedImagesSplit/train'
 test_dir = 'combinedImagesSplit/test'
 val_dir = 'combinedImagesSplit/val'
@@ -84,7 +80,7 @@ def GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16):
     # X = MaxPooling2D((2, 2))(X)
 
     X = Flatten()(X)
-    X = Dropout(rate=0.3)(X)
+    # X = Dropout(rate=0.3)(X)
     X = Dense(classes, activation='softmax', name='fc' + str(classes))(X)
 
     model = Model(inputs=X_input, outputs=X, name=MODEL_NAME)
@@ -106,7 +102,7 @@ def GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16):
 
 model = GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16)
 model.summary()
-opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
+opt = tf.keras.optimizers.Adam(learning_rate=0.001)
 model.compile(optimizer=opt, loss='categorical_crossentropy',
               metrics=['accuracy'])
 
