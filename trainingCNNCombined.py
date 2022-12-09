@@ -11,7 +11,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator, img_to_arra
 from tensorflow.keras.layers import (Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten,
                                      Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D, Dropout)
 
-IMG_HEIGHT = 128
+IMG_HEIGHT = 148
 IMG_WIDTH = 385
 batch_size = 32
 train_dir = 'combinedImagesSplit/train'
