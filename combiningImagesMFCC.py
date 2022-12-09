@@ -13,7 +13,7 @@ mfccFiles = sorted(list(glob("mfcc" + "/*.npy")))
 melSpectrograms = sorted(list(glob("spectrogramDirectory" + '/*.png')))
 
 base_out = "combinedImages/"
-for i in range(5):
+for i in range(len(mfccFiles)):
     print(i)
     print(mfccFiles[i])
     file = mfccFiles[i]
