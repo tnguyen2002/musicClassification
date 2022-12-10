@@ -12,12 +12,13 @@ from tensorflow.keras.layers import (Input, Add, Dense, Activation, ZeroPadding2
 
 IMG_HEIGHT = 128
 IMG_WIDTH = 385
+NAME = "2LNoMaxPooling"
 batch_size = 32
 train_dir = 'spectrogramSplit/train'
 test_dir = 'spectrogramSplit/test'
 val_dir = 'spectrogramSplit/val'
 
-tf.random.set_seed(1)
+# tf.random.set_seed(1)
 image_gen_train = ImageDataGenerator(rescale=1./255)
 image_gen_val = ImageDataGenerator(rescale=1./255)
 image_gen_test = ImageDataGenerator(rescale=1./255)
@@ -63,22 +64,22 @@ def GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16):
     X = Conv2D(8, kernel_size=(3, 3), strides=(1, 1))(X_input)
     X = BatchNormalization(axis=3)(X)
     X = Activation('relu')(X)
-    X = MaxPooling2D((2, 2))(X)
+    # X = MaxPooling2D((2, 2))(X)
 
     X = Conv2D(16, kernel_size=(3, 3), strides=(1, 1))(X)
     X = BatchNormalization(axis=3)(X)
     X = Activation('relu')(X)
     X = MaxPooling2D((2, 2))(X)
 
-    X = Conv2D(32, kernel_size=(3, 3), strides=(1, 1))(X)
-    X = BatchNormalization(axis=3)(X)
-    X = Activation('relu')(X)
-    X = MaxPooling2D((2, 2))(X)
+    # X = Conv2D(32, kernel_size=(3, 3), strides=(1, 1))(X)
+    # X = BatchNormalization(axis=3)(X)
+    # X = Activation('relu')(X)
+    # X = MaxPooling2D((2, 2))(X)
 
-    X = Conv2D(64, kernel_size=(3, 3), strides=(1, 1))(X)
-    X = BatchNormalization(axis=3)(X)
-    X = Activation('relu')(X)
-    X = MaxPooling2D((2, 2))(X)
+    # X = Conv2D(64, kernel_size=(3, 3), strides=(1, 1))(X)
+    # X = BatchNormalization(axis=3)(X)
+    # X = Activation('relu')(X)
+    # X = MaxPooling2D((2, 2))(X)
 
     # X = Conv2D(128, kernel_size=(3, 3), strides=(1, 1))(X)
     # X = BatchNormalization(axis=3)(X)
@@ -92,19 +93,6 @@ def GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16):
     model = Model(inputs=X_input, outputs=X, name='GenreModel')
     return model
 
-# model = tf.keras.Sequential(name="Sequential_CNN")
-
-# model.add(Conv2D(2, kernel_size=(3, 3), strides=(2, 2), padding="valid", activation="relu", input_shape=(IMG_HEIGHT, IMG_WIDTH,1)))
-# model.add(BatchNormalization())
-# model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1), padding="valid"))
-
-# model.add(Conv2D(16, kernel_size=(3, 3), strides=(1, 1), padding="valid",activation="relu", input_shape=(IMG_HEIGHT, IMG_WIDTH,1)))
-# model.add(BatchNormalization())
-# model.add(MaxPooling2D(pool_size=(2, 2), strides=(1, 1), padding="valid"))
-
-# model.add(Flatten())
-# model.add(Dense(16, activation='softmax'))
-
 
 model = GenreModel(input_shape=(IMG_HEIGHT, IMG_WIDTH, 1), classes=16)
 model.summary()
@@ -112,8 +100,8 @@ opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
 model.compile(optimizer=opt, loss='categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(train_data_gen, epochs=30, validation_data=test_data_gen)
-model.save('melCNN4LDropout')
+model.fit(train_data_gen, epochs=10, validation_data=test_data_gen)
+model.save(NAME)
 
-model = tf.keras.models.load_model('melCNN4LDropout')
+model = tf.keras.models.load_model(NAME)
 model.evaluate(test_data_gen)
